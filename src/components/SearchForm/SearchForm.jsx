@@ -8,11 +8,11 @@ import searchButton from '../../images/search/seacrh.svg';
 
 const SearchForm = () => {
 	return (
-		<Section theme='dark' sectionName='search-form' >
+		<Section sectionName='search-form' >
 			<form className='search-form__search-bar-wrapper'>
 				<div className='search-form__search-bar'>
 					<input type='text' className='search-form__input' placeholder='Фильм' required={true} />
-					<Button type='submit' className='button button button_placed_search-bar'><img src={searchButton} alt="" /></Button>
+					<Button type='submit' className='button button button_placed_search-bar'><img src={searchButton} alt="search" /></Button>
 				</div>
 				<FilterCheckbox checked={false} />
 			</form>

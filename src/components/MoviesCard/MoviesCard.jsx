@@ -8,8 +8,8 @@ function MoviesCard({name='', img='', duration='', saved, onSavedMoviesPage}) {
         <div className='movie'>
             <img src={img} alt="" className='movie__img'/>
             { saved === true ? 
-                <> { onSavedMoviesPage ? ( <img src={deleteImg} alt="" className='movie__saved'/>) : (<img src={saveImg} alt="" className='movie__saved'/> ) }
-                </> : ( <p className='movie__save'>Cохранить</p> )
+                <> { onSavedMoviesPage ? ( <button className='movie__btn'><img src={deleteImg} alt="delete" /></button>) : (<button className='movie__btn'><img src={saveImg} alt="saved" /></button> ) }
+                </> : ( <button className='movie__save'>Cохранить</button> )
             }
             <div className='movie__desctiontion-container'>
                 <p className='movie__name'>{name}</p>
@@ -18,5 +18,7 @@ function MoviesCard({name='', img='', duration='', saved, onSavedMoviesPage}) {
         </div>
     );
 }
+
+//
 
 export default MoviesCard;

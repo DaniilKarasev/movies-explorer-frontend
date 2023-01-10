@@ -15,11 +15,13 @@ const Main = ({
 	return (
 		<>
 			<Header loggedIn={false} handleOpenBurgerMenu={handleOpenBurgerMenu} />
-			<Promo />
-			<AboutProject />
-			<Techs techsList={techs} />
-			<AboutMe />
-			<Portfolio projectsList={portfolio} />
+			<main className='main'>
+				<Promo />
+				<AboutProject />
+				<Techs techsList={techs} />
+				<AboutMe />
+				<Portfolio projectsList={portfolio} />
+			</main>
 			<Footer />
 		</>
 	);

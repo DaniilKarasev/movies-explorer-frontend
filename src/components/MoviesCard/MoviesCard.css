@@ -7,13 +7,18 @@
     transition: all 0.4s ease-in-out;
 }
 
-.movie__saved {
+.movie__btn {
     max-width: 21px;
     max-height: 21px;
     position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     top: 14px;
     right: 14px;
     opacity: 0;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
     visibility: hidden;
     transition: all 0.4s ease-in-out;
 }
@@ -29,6 +34,7 @@
     min-width: 72px;
     min-height: 21px;
     border-radius: 8px;
+    border: none;
     background-color: #F9F9F9;
     display: flex;
     align-items: center;
@@ -84,14 +90,14 @@
     opacity: 1;
     visibility: visible;
 }
-.movie__save:hover, .movie__saved:hover {
+.movie__save:hover, .movie__btn:hover {
     opacity: 1;
     visibility: visible;
     transform: scale(105%);
     opacity: 0.8;
 }
 
-.movie__img:hover + .movie__saved {
+.movie__img:hover + .movie__btn {
     opacity: 1;
     visibility: visible;
 }

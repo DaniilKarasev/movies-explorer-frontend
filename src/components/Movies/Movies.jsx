@@ -12,8 +12,10 @@ const Movies = ({
 	return (
 		<>
 			<Header loggedIn={true} handleOpenBurgerMenu={handleOpenBurgerMenu} theme='white' />
-			<SearchForm />
-			<MoviesCardList moviesList={movies} />
+			<main className='main'>
+				<SearchForm />
+				<MoviesCardList moviesList={movies} />
+			</main>
 			<Footer />
 		</>
 	);

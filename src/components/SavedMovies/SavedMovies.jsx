@@ -12,8 +12,10 @@ const SavedMovies = ({
 	return (
 		<>
 			<Header loggedIn={true} handleOpenBurgerMenu={handleOpenBurgerMenu} theme='white' />
-			<SearchForm />
-			<MoviesCardList moviesList={savedMovies} onSavedMoviesPage={true} />
+			<main className='main'>
+				<SearchForm />
+				<MoviesCardList moviesList={savedMovies} onSavedMoviesPage={true} />
+			</main>
 			<Footer />
 		</>
 	);

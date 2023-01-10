@@ -5,6 +5,10 @@
 	flex-grow: 1;
 }
 
+.profile-page {
+	min-height: 92vh;
+}
+
 @media (min-width: 768px) {
 	.profile {
 		padding-top: 74px;
