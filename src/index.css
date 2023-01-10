@@ -1,0 +1,10 @@
+@import url("./vendor/normalize.css");
+@import url("./vendor/fonts.css");
+
+.root {
+  background-color: #303030;
+}
+
+html {
+  scroll-behavior: smooth;
+}
