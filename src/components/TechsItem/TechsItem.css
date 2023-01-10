@@ -1,0 +1,32 @@
+.techs__list-item {
+	min-width: 90px;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #E8E8E8;
+	border-radius: 10px;
+}
+
+.techs__list-item-name {
+	padding-bottom: 4px;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	letter-spacing: -0.04em;
+	color: inherit;
+}
+
+@media (max-width: 768px) {
+	.techs__list-item {
+		min-width: 84px;
+		max-height: 57px;
+	}
+
+	.techs__list-item-name {
+		padding-bottom: 0px;
+		font-size: 12px;
+		line-height: 15px;
+	}
+}
