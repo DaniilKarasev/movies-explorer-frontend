@@ -26,7 +26,7 @@
 	font-weight: 400;
 	font-size: 18px;
 	line-height: 20px;
-	color: #A0A0A0;
+	color: black;
 	background-color: #F9F9F9;
 	border: none;
 	border-radius: 8px;
@@ -36,8 +36,13 @@
 	outline: 1px solid #8B8B8B;
 }
 
+.search-form__input:not(:focus) {
+	color: #A0A0A0;
+}
+
 .search-form__input::placeholder {
 	opacity: 0.6;
+	color: #A0A0A0;
 }
 
 @media (max-width: 768px) {

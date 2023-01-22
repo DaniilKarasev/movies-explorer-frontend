@@ -71,6 +71,19 @@
 	transform: translateX(18px);
 }
 
+.searchForm__switcher-label_disabled {
+	opacity: 0.2;
+}
+
+.searchForm__switcher_disabled {
+	opacity: 0.2;
+}
+
+.searchForm__toggle-slider_disabled {
+	opacity: 0.2;
+	cursor: default;
+}
+
 @media (max-width: 535px) {
 	.searchForm__checkbox-switcher-label {
 		margin-left: 13px;

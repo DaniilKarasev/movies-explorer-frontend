@@ -2,16 +2,16 @@
 @import url("./vendor/fonts.css");
 
 .root {
-  background-color: #303030;
+	background-color: #303030;
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: white;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	background-color: white;
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }

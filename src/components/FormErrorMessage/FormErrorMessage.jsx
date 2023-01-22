@@ -1,13 +1,13 @@
 import React from 'react';
-
 import './FormErrorMessage.css'
 
 const FormErrorMessage = ({
-	errorMessage
+  inputWithErrorName,
+  errorMessage
 }) => {
-	return (
-		<span className={`form-error-message ${errorMessage && `form-error-message_visible`}`}>{errorMessage}</span>
-	);
+  return (
+    <span className={`form-error-message ${errorMessage && `form-error-message_visible`}`}>{`${inputWithErrorName}: ${errorMessage}`}</span>
+  );
 };
 
 export default FormErrorMessage;

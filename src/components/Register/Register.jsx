@@ -1,43 +1,141 @@
-import React from 'react';
-
+import { useState, useEffect} from 'react';
+import { useCustomInputValidation } from '../../customHooks/useCustomInputValidation';
+import PageWithForm from '../PageWithForm/PageWithForm';
+import AuthForm from '../AuthForm/AuthForm';
 import Input from '../Input/Input';
 import FormErrorMessage from '../FormErrorMessage/FormErrorMessage';
 
-const Register = () => {
-	return (
-		<>
-			<Input
-				inputName='Имя'
-				classNameType='name'
-				classNamePlaced='auth-form'
-				inputPlaceholder='Имя'
-				inputType='text'
-				required={true}
-				inputError={false}
-			/>
-			<Input
-				inputName='Email'
-				classNameType='email'
-				classNamePlaced='auth-form'
-				inputPlaceholder='Email'
-				inputType='email'
-				required={true}
-				inputError={false}
-			/>
-			<Input
-				inputName='Пароль'
-				classNameType='password'
-				classNamePlaced='auth-form'
-				inputPlaceholder='Пароль'
-				inputType='password'
-				required={true}
-				inputError={true}
-			/>
-			<FormErrorMessage
-				errorMessage='Что-то пошло не так...'
-			/>
-		</>
-	);
+const Register = ({
+  onSignUp,
+  isApiErrorMessage
+}) => {
+  const [formValid, setFormValid] = useState(false)
+  const [submitButtonText, setSubmitButtonText] = useState("Зарегистрироваться")
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [apiErrorMessage, setApiErrorMessage] = useState('')
+  const {validationMessage: nameErrorMessage, isValid: nameValid, onChange: validateName } = useCustomInputValidation({})
+  const {validationMessage: emailErrorMessage, isValid: emailValid, onChange: validateEmail } = useCustomInputValidation({})
+  const {validationMessage: passwordErrorMessage, isValid: passwordValid, onChange: validatePassword } = useCustomInputValidation({})
+
+  useEffect(() => {
+      nameValid && name !== '' && emailValid && email !== '' && passwordValid && password !== '' ? setFormValid(false) : setFormValid(true);
+  }, [nameValid, emailValid, passwordValid, name, email, password])
+
+  useEffect(() => {
+    setApiErrorMessage('')
+  }, [])
+
+  useEffect(() => {
+    setApiErrorMessage(isApiErrorMessage)
+  }, [isApiErrorMessage])
+
+  function changeName(e) {
+    if (apiErrorMessage) {
+      setApiErrorMessage('')
+    }
+    setName(e.target.value);
+    validateName(e)
+  }
+
+  function changeEmail(e) {
+    if (apiErrorMessage) {
+      setApiErrorMessage('')
+    }
+    setEmail(e.target.value);
+    validateEmail(e)
+  }
+  
+  function changePassword(e) {
+    if (apiErrorMessage) {
+      setApiErrorMessage('')
+    }
+    setPassword(e.target.value);
+    validatePassword(e)
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    setSubmitButtonText("Регистрация...")
+    onSignUp({
+      name: name,
+      email: email,
+      password: password
+    })
+    .finally(() => {
+      setApiErrorMessage('')
+      setSubmitButtonText("Зарегистрироваться")
+      setName('')
+      setEmail('')
+      setPassword('')
+    })
+  }
+
+  return (
+    <PageWithForm 
+      name='register'
+      greeting='Добро пожаловать!'
+    >
+      <AuthForm
+        isFormValid={formValid}
+        submitButtonText={submitButtonText}
+        onSubmit={handleSubmit}
+      >
+        <Input 
+          inputName='Имя'
+          classNameType='name'
+          classNamePlaced='auth-form'
+          inputPlaceholder='Имя'
+          inputType='text'
+          required={true}
+          inputError={nameValid}
+          onChange={changeName}
+          value={name}
+        />
+        <Input 
+          inputName='Email'
+          classNameType='email'
+          classNamePlaced='auth-form'
+          inputPlaceholder='Email'
+          inputType='email'
+          required={true}
+          inputError={emailValid}
+          onChange={changeEmail}
+          value={email}
+        />
+        <Input 
+          inputName='Пароль'
+          classNameType='password'
+          classNamePlaced='auth-form'
+          inputPlaceholder='Пароль'
+          inputType='password'
+          required={true}
+          minLength="5"
+          maxLength="30"
+          inputError={passwordValid}
+          onChange={changePassword}
+          value={password}
+        />
+        {apiErrorMessage && <FormErrorMessage
+          inputWithErrorName='Ошибка'
+          errorMessage={apiErrorMessage}
+        />}
+        {nameErrorMessage && <FormErrorMessage
+          inputWithErrorName='Имя'
+          errorMessage={nameErrorMessage}
+        />}
+        {emailErrorMessage && <FormErrorMessage
+          inputWithErrorName='Email'
+          errorMessage={emailErrorMessage}
+        />}
+        {passwordErrorMessage && <FormErrorMessage
+          inputWithErrorName='Пароль'
+          errorMessage={passwordErrorMessage}
+        />}
+      </AuthForm>
+    </PageWithForm>
+  );
 };
 
 export default Register;

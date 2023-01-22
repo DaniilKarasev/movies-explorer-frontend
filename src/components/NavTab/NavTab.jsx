@@ -1,7 +1,7 @@
 import React from 'react';
-import './NavTab.css'
 import { navTab } from '../../utils/constants';
 import NavTabItem from '../NavTabItem/NavTabItem';
+import './NavTab.css'
 
 function NavTab(props) {
     return (

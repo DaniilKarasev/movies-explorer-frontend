@@ -1,21 +1,41 @@
 import React from 'react';
+import Section from '../Section/Section';
+import Button from '../Button/Button';
 import './MoviesCardList.css'
-import MoviesCard from '../MoviesCard/MoviesCard'
 
+const MoviesCardList = ({
+  children,
+  onLoadMoreButtonClick,
+  loadMoreMoviesButtonVisible,
+  moviesMessageVisible,
+  moviesMessage,
+  apiErrorMessage
+}) => {
 
-function MoviesCardList({moviesList, onSavedMoviesPage}) {
-    return (
-        <section className='moviesCardList'>
-            <div className='moviesCardList__wrapper'>
-                {moviesList.map((moviesList, index) => {
-                    return (
-                        <MoviesCard name={moviesList.name} img={moviesList.img} duration={moviesList.duration} saved={moviesList.saved} key={index} onSavedMoviesPage={onSavedMoviesPage}/>
-                    )
-                })}
-            </div>
-            {onSavedMoviesPage ? (<></>) : (<button className='moviesCardList__morebtn'>Ещё</button>)}
-        </section>
-    );
-}
+  return (
+    <Section sectionName='moviesCardList'>
+      
+      {moviesMessageVisible ? (
+          <p className='moviesCardList__no-found'>{apiErrorMessage ? apiErrorMessage : moviesMessage}</p>
+        ) : (
+          <ul className='moviesCardList__film-list'>
+          {children}
+      </ul>
+      )}
+      
+      {loadMoreMoviesButtonVisible ? (
+        <div className='moviesCardList__footer moviesCardList__footer_with_button'>
+          <Button 
+            className='button button_placed_card-list' 
+            onClick={onLoadMoreButtonClick}
+          >Ещё</Button>
+        </div>
+          ) : (
+        <div className='moviesCardList__footer' />
+      )}
+      
+    </Section>
+  );
+};
 
 export default MoviesCardList;

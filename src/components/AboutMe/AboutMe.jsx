@@ -1,10 +1,8 @@
 import React from 'react';
-
-
-import './AboutMe.css'
-import studentPhoto from '../../images/about-me/avatar.jpg'
 import Section from '../Section/Section';
 import SectionTitle from '../SectionTitle/SectionTitle';
+import studentPhoto from '../../images/about-me/avatar.jpg'
+import './AboutMe.css'
 
 const AboutMe = () => {
 	return (

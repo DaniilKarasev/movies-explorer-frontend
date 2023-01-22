@@ -1,14 +1,10 @@
 .header {
 	display: flex;
 	flex-direction: row;
-	background-color: #073042;
+	background-color: white;
 	height: 38px;
 	padding: 18px 70px;
 	justify-content: space-between;
-}
-
-.header_theme_white {
-	background-color: white;
 }
 
 .header__nav-wrapper {
@@ -46,6 +42,9 @@
 }
 
 .header__profile-container_placed_burger-menu {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin-bottom: 92px;
 }
 
@@ -150,6 +149,11 @@
 	font-weight: 400;
 	padding-bottom: 5px;
 	border-bottom: 2px solid black;
+}
+
+.header_theme_dark {
+	background-color: #073042;
+	color: white;
 }
 
 @media (max-width: 535px) {

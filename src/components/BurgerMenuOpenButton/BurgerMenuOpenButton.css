@@ -29,6 +29,10 @@
 	left: 8px;
 }
 
+.burger-menu-button__line_theme_dark {
+	background: white;
+}
+
 .burger-menu-button__line:nth-child(1) {
 	top: 12px;
 }
