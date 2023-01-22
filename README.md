@@ -13,7 +13,7 @@
   
 Ссылки и IP:
  1. Фронт: https://movie.dkarasev.nomoredomains.rocks/
- 2. Бек: https://api.movie.dkarasev.nomoredomains.rocks/
+ 2. Бек: https://api.movie.dkarasev.nomoredomains.club/
  3. IP: 62.84.114.249
  4. Пуллреквест: https://github.com/DaniilKarasev/movies-explorer-frontend/pull/2
 
