@@ -16,3 +16,4 @@
  2. Бек: https://api.movie.dkarasev.nomoredomains.rocks/
  3. IP: 62.84.114.249
  4. Пуллреквест: https://github.com/DaniilKarasev/movies-explorer-frontend/pull/2
+
