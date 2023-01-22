@@ -9,22 +9,22 @@ import { portfolio, techs } from '../../utils/constants';
 import Footer from "../Footer/Footer";
 
 const Main = ({
-  handleOpenBurgerMenu
+	handleOpenBurgerMenu
 }) => {
 
-  return (
-    <>
-      <Header handleOpenBurgerMenu={handleOpenBurgerMenu} theme='dark'/>
-      <main className='main'>
-      <Promo />
-      <AboutProject />
-      <Techs techsList={techs} />
-      <AboutMe />
-      <Portfolio projectsList={portfolio} />
-      </main>
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<Header handleOpenBurgerMenu={handleOpenBurgerMenu} theme='dark' />
+			<main className='main'>
+				<Promo />
+				<AboutProject />
+				<Techs techsList={techs} />
+				<AboutMe />
+				<Portfolio projectsList={portfolio} />
+			</main>
+			<Footer />
+		</>
+	);
 };
 
 export default Main;
