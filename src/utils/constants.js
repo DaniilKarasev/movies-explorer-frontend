@@ -56,13 +56,13 @@ export const navTab = [
 	},
 ];
 
-export const widthMax = { maxDisplayWidth: 1280, initialAmountCards: 16, amountCardsForLoad: 4 }
-export const widthRegular = { maxDisplayWidth: 1280, initialAmountCards: 12, amountCardsForLoad: 3 }
-export const widthTablet = { maxDisplayWidth: 992, initialAmountCards: 8, amountCardsForLoad: 2 }
-export const widthMobile = { maxDisplayWidth: 631, initialAmountCards: 5, amountCardsForLoad: 2 }
+export const widthMax = { maxDisplayWidth: 1280, amountMoviesOnLoad: 16, amountMoviesForLoad: 4 }
+export const widthRegular = { maxDisplayWidth: 1280, amountMoviesOnLoad: 12, amountMoviesForLoad: 3 }
+export const widthTablet = { maxDisplayWidth: 992, amountMoviesOnLoad: 8, amountMoviesForLoad: 2 }
+export const widthMobile = { maxDisplayWidth: 631, amountMoviesOnLoad: 5, amountMoviesForLoad: 2 }
 
 export const movieNotFoundMessage = 'Ничего не найдено';
-export const movieLoadErrorMessage = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз';
+export const movieLoadErrorMessage = 'Во время запроса произошла ошибка. Попробуйте ещё раз';
 export const inputEmailCustomError = 'Не верный формат адреса электронной почты';
 export const inputNameCustomError = 'Должен содержать только латиницу, кириллицу, пробел или дефис';
 

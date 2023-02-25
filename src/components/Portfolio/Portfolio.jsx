@@ -15,7 +15,6 @@ const Portfolio = ({
 						<PortfolioItem name={project.title} link={project.url} key={index} />
 					)
 				})}
-
 			</ul>
 		</Section>
 	);

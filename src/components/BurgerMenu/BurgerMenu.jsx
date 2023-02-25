@@ -9,7 +9,7 @@ const BurgerMenu = ({
 	handleOpenBurgerMenu
 }) => {
 	const currentUser = React.useContext(CurrentUserContext);
-
+	
 	return (
 		<div className={`burger-menu ${burgerMenuOpen && `burger-menu_visible`}`}>
 			<div className='burger-menu__wrapper'>

@@ -1,20 +1,19 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect} from "react"
 
 export const useLocalStorage = (initialValue, storageName) => {
-	const getValue = () => {
-		const storage = localStorage.getItem(storageName)
-		if (storage) {
-			return JSON.parse(storage)
-		}
-		return initialValue
-	}
+    const getValue = () => {
+        const storage = localStorage.getItem(storageName);
+        return storage ? JSON.parse(storage) : initialValue;
+    }
 
-	const [value, setValue] = useState(getValue)
+    const [value, setValue] = useState(getValue())
 
-	useEffect(() => {
-		localStorage.setItem(storageName, JSON.stringify(value))
-	}, [value])
+    useEffect(() => {
+        const saveData = async () => {
+            await localStorage.setItem(storageName, JSON.stringify(value));
+        }
+        saveData();
+    }, [value, storageName]);
 
-	return [value, setValue]
+    return [value, setValue]
 }

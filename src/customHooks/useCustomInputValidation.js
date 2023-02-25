@@ -10,24 +10,25 @@ export const useCustomInputValidation = () => {
 	const [isValid, setIsValid] = useState(true)
 
 	const onChange = (e) => {
-		setInputType(e.target.type)
-		setInputValue(e.target.value)
-		if (inputType !== 'email' && inputType !== 'text') {
-			setValidationMessage(e.target.validationMessage)
-		}
-	}
+        setInputType(e.target.type);
+        setInputValue(e.target.value);
+        if (inputType === 'email' || inputType !== 'text') {
+            setValidationMessage(e.target.validationMessage);
+        }
+    }
 
 	useEffect(() => {
-		if (inputType === 'email') {
-			setIsValid(emailValidator(inputValue))
-		}
-		if (inputType === 'text') {
-			setIsValid(nameValidator(inputValue))
-		}
-		if (inputType !== 'email' && inputType !== 'text') {
-			setIsValid(!validationMessage)
-		}
-	}, [inputValue])
+        switch (inputType) {
+            case 'email':
+                setIsValid(emailValidator(inputValue));
+                break;
+            case 'text':
+                setIsValid(nameValidator(inputValue));
+                break;
+            default:
+                setIsValid(!validationMessage);
+        }
+    }, [inputValue]);
 
 	useEffect(() => {
 		if (inputType === 'email') {

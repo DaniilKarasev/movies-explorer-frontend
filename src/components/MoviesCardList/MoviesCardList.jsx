@@ -5,16 +5,14 @@ import './MoviesCardList.css'
 
 const MoviesCardList = ({
 	children,
-	onLoadMoreButtonClick,
-	loadMoreMoviesButtonVisible,
+	loadMoreMovies,
+	IsMoreMovieBtnVisible,
 	moviesMessageVisible,
 	moviesMessage,
 	apiErrorMessage
 }) => {
-
 	return (
 		<Section sectionName='moviesCardList'>
-
 			{moviesMessageVisible ? (
 				<p className='moviesCardList__no-found'>{apiErrorMessage ? apiErrorMessage : moviesMessage}</p>
 			) : (
@@ -22,18 +20,16 @@ const MoviesCardList = ({
 					{children}
 				</ul>
 			)}
-
-			{loadMoreMoviesButtonVisible ? (
+			{IsMoreMovieBtnVisible ? (
 				<div className='moviesCardList__footer moviesCardList__footer_with_button'>
 					<Button
 						className='button button_placed_card-list'
-						onClick={onLoadMoreButtonClick}
+						onClick={loadMoreMovies}
 					>Ещё</Button>
 				</div>
 			) : (
 				<div className='moviesCardList__footer' />
 			)}
-
 		</Section>
 	);
 };

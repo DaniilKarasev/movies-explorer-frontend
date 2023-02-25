@@ -5,7 +5,7 @@ import './AuthForm.css'
 const AuthForm = ({
 	children,
 	authFormClassName,
-	submitButtonText,
+	submitBtnText,
 	submitButtonClassName,
 	isFormValid,
 	onSubmit
@@ -16,16 +16,14 @@ const AuthForm = ({
 			className={authFormClassName ? `auth__form ${authFormClassName}` : `auth__form`}
 		>
 			<div className='auth__form-wrapper'>
-
 				{children}
-
 			</div>
 			<Button
 				className={submitButtonClassName ? `button ${submitButtonClassName}` : `button button_placed_auth-form`}
 				type='submit'
 				isDisabled={isFormValid}
 				onClick={onSubmit}
-			>{submitButtonText}
+			>{submitBtnText}
 			</Button>
 		</form>
 	);

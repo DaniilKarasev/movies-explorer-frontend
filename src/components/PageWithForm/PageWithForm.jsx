@@ -7,14 +7,14 @@ import './PageWithForm.css'
 const PageWithForm = ({
 	children,
 	name,
-	greeting
+	title
 }) => {
 	return (
 		<main className='main'>
 			<Section sectionName='page-with-form'>
 				<div className='page-with-form__wrapper'>
 					<Logo placedTo='page-with-form' />
-					<h1 className='page-with-form__greetings'>{greeting}</h1>
+					<h1 className='page-with-form__greetings'>{title}</h1>
 					{children}
 					{name === 'login' && (
 						<p className='page-with-form__footer-text'>

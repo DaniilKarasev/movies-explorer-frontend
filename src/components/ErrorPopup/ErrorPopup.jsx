@@ -6,8 +6,6 @@ const ErrorPopup = ({
 	errorMessage,
 	handleOpenErrorPopup,
 }) => {
-
-
 	return (
 		<div
 			className={`error-popup ${isErrorPopupOpen ? `error-popup_visible` : ``}`}

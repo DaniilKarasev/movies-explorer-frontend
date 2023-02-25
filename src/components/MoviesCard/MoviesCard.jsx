@@ -5,38 +5,42 @@ import Preloader from '../Preloader/Preloader';
 import './MoviesCard.css'
 
 const MoviesCard = ({
-	onMovieLike,
-	onMovieDislike,
-	onMovieRemove,
+	handleMovieLike,
+	handleMovieDislike,
+	handleDeleteMovieFromSaved,
 	movie,
 	saved = false,
 	liked = false,
 }) => {
 	const [isLiked, setIsLiked] = useState(liked)
-	const [loaded, setLoaded] = useState(false);
+	const [isLoaded, setIsLoaded] = useState(false);
 
-	function handleMovieLike() {
-		onMovieLike(movie)
-			.finally(() => {
-				setIsLiked(true)
-			})
+	async function handleLike() {
+		try {
+			await handleMovieLike(movie);
+			setIsLiked(true);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 
-	function handleMovieDislike() {
-		onMovieDislike(movie)
-			.finally(() => {
-				setIsLiked(false)
-			})
+	async function handleDislike() {
+		try {
+			await handleMovieDislike(movie);
+			setIsLiked(false);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
-	function handleRemoveMovie() {
-		onMovieRemove(movie)
+	async function handleRemoveMovie() {
+		await handleDeleteMovieFromSaved(movie)
 	}
 
 	return (
 		<li>
 			<div className='movie'>
-				{loaded ? null : (<Preloader />)}
+				{isLoaded ? null : (<Preloader />)}
 				<a
 					href={movie.trailerLink}
 					className='movie__link'
@@ -47,8 +51,8 @@ const MoviesCard = ({
 						src={`${saved ? movie.image : `${moviesBaseUrl}${movie.image.url}`}`}
 						alt={movie.nameRU}
 						className='movie__img'
-						style={loaded ? {} : { display: 'none' }}
-						onLoad={() => setLoaded(true)}
+						style={isLoaded ? {} : { display: 'none' }}
+						onLoad={() => setIsLoaded(true)}
 					/>
 				</a>
 				<div className='movie__desctiontion-container'>
@@ -59,12 +63,12 @@ const MoviesCard = ({
 							/>
 						) : ( isLiked ? (
 								<Button
-									onClick={handleMovieDislike}
+									onClick={handleDislike}
 									className={`button button_type_like ${isLiked && `button_type_like-active`}`}
 								/>
 						) : (
 								<Button
-									onClick={handleMovieLike}
+									onClick={handleLike}
 									className={`button test button_type_like ${isLiked && `button_type_like-active`}`}
 								>Сохранить</Button>
 						))

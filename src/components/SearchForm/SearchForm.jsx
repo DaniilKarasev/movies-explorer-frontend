@@ -6,17 +6,19 @@ import searchButton from '../../images/search/seacrh.svg';
 import './SearchForm.css';
 
 const SearchForm = ({
-	onFilterQueryChange,
+	handleChangeFilterQuery,
 	filterQueryValue,
 	isLoading,
-	onMovieCheckboxChange,
-	shortMovieCheckboxChecked,
+	handleChangeFilterStatus,
+	isFilterActive,
 }) => {
 	const [query, setQuery] = useState(filterQueryValue)
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		onFilterQueryChange(query);
-	}
+	
+	const handleSubmit = async (e) => {
+        e.preventDefault();
+        await handleChangeFilterQuery(query);
+        setQuery('');
+    }
 
 	useEffect(() => {
 		setQuery(filterQueryValue)
@@ -44,8 +46,8 @@ const SearchForm = ({
 					><img src={searchButton} alt="search" /></Button>
 				</div>
 				<FilterCheckbox
-					shortMovieCheckboxChecked={shortMovieCheckboxChecked}
-					onMovieCheckboxChange={onMovieCheckboxChange}
+					isFilterActive={isFilterActive}
+					handleChangeFilterStatus={handleChangeFilterStatus}
 					isLoading={isLoading}
 				/>
 			</form>

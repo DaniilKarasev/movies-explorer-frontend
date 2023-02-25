@@ -3,7 +3,7 @@ import { navTab } from '../../utils/constants';
 import NavTabItem from '../NavTabItem/NavTabItem';
 import './NavTab.css'
 
-function NavTab(props) {
+function NavTab() {
     return (
         <section className='navtab'>
             <ul className='navtab__list'>

@@ -12,153 +12,156 @@ class nomoredomainsApi {
 		this._moviesBaseUrl = moviesBaseUrl
 	}
 
-	_getResponseData(res) {
+	_checkResponse(res) {
 		if (res.ok) {
 			return res.json();
 		}
 		return Promise.reject(res);
 	}
 
-	signUp({
-		name,
-		email,
-		password
-	}) {
-		return fetch(`${this._baseUrl}/signup`, {
-			credentials: 'include',
-			method: 'POST',
-			headers: this._headers,
-			body: JSON.stringify({
-				"name": name,
-				"password": password,
-				"email": email
-			})
-		})
-			.then(res => {
-				return this._getResponseData(res)
-			})
-	}
+    async signUp({ data }) {
+        try {
+            const response = await fetch(`${this._baseUrl}/signup`, {
+                credentials: 'include',
+                method: 'POST',
+                headers: this._headers,
+                body: JSON.stringify({
+                    name: data.name,
+                    password: data.password,
+                    email: data.email
+                })
+            });
+            return this._checkResponse(response);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
-	signIn({
-		email,
-		password
-	}) {
-		return fetch(`${this._baseUrl}/signin`, {
-			credentials: 'include',
-			method: 'POST',
-			headers: this._headers,
-			body: JSON.stringify({
-				"password": password,
-				"email": email
-			})
-		})
-			.then(res => {
-				return this._getResponseData(res)
-			})
-	}
+    async signIn({ data }) {
+        try {
+            const res = await fetch(`${this._baseUrl}/signin`, {
+                credentials: 'include',
+                method: 'POST',
+                headers: this._headers,
+                body: JSON.stringify({
+                    "password": data.password,
+                    "email": data.email
+                })
+            });
+            return this._checkResponse(res);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+	async getUser() {
+        try {
+            const res = await fetch(`${this._baseUrl}/users/me`, {
+                credentials: 'include',
+                method: 'GET',
+                headers: this._headers
+            });
+            return this._checkResponse(res);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-	getUser() {
-		return fetch(`${this._baseUrl}/users/me`, {
-			credentials: 'include',
-			method: 'GET',
-			headers: this._headers
-		})
-			.then(res => {
-				return this._getResponseData(res)
-			})
-	}
+	async  authWithToken() {
+        try {
+            const res = await fetch(`${this._baseUrl}/users/me`, {
+                credentials: 'include',
+                method: 'GET',
+            });
+            return this._checkResponse(res);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-	authWithToken() {
-		return fetch(`${this._baseUrl}/users/me`, {
-			credentials: 'include',
-			method: 'GET',
-		})
-			.then(res => {
-				return this._getResponseData(res)
-			})
-	}
+	async saveMovie(movie) {
+        try {
+            const response = await fetch(`${this._baseUrl}/movies`, {
+                credentials: 'include',
+                method: 'POST',
+                headers: this._headers,
+                body: JSON.stringify({
+                    country: movie.country,
+                    director: movie.director,
+                    duration: movie.duration,
+                    year: movie.year,
+                    description: movie.description,
+                    image: `${this._moviesBaseUrl}${movie.image.url}`,
+                    trailerLink: movie.trailerLink,
+                    thumbnail: `${this._moviesBaseUrl}${movie.image.url}`,
+                    movieId: movie.id,
+                    nameRU: movie.nameRU,
+                    nameEN: movie.nameEN
+                })
+            });
+            const data = await this._checkResponse(response);
+            return data;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 
-	addMovieToSavedMoviesList({
-		country,
-		director,
-		duration,
-		year,
-		description,
-		image,
-		trailerLink,
-		id,
-		nameRU,
-		nameEN,
-	}) {
-		return fetch(`${this._baseUrl}/movies`, {
-			credentials: 'include',
-			method: 'POST',
-			headers: this._headers,
-			body: JSON.stringify({
-				country: country,
-				director: director,
-				duration: duration,
-				year: year,
-				description: description,
-				image: `${this._moviesBaseUrl}${image.url}`,
-				trailerLink: trailerLink,
-				thumbnail: `${this._moviesBaseUrl}${image.url}`,
-				movieId: id,
-				nameRU: nameRU,
-				nameEN: nameEN
-			})
-		}).then(res => {
-			return this._getResponseData(res)
-		})
-	}
+	async getSavedMovies() {
+        try {
+            const response = await fetch(`${this._baseUrl}/movies`, {
+                credentials: 'include',
+                method: 'GET',
+                headers: this._headers
+            });
+            const result = await this._checkResponse(response);
+            return result;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 
-	getSavedMoviesList() {
-		return fetch(`${this._baseUrl}/movies`, {
-			credentials: 'include',
-			method: 'GET',
-			headers: this._headers
-		}).then(res => {
-			return this._getResponseData(res)
-		})
-	}
+	async deleteMovie(movieId) {
+        try {
+            const response = await fetch(`${this._baseUrl}/movies/${movieId}`, {
+                credentials: 'include',
+                method: 'DELETE',
+                headers: this._headers,
+            })
+            this._checkResponse(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-	deleteMovieFromSavedList(movieId) {
-		return fetch(`${this._baseUrl}/movies/${movieId}`, {
-			credentials: 'include',
-			method: 'DELETE',
-			headers: this._headers,
-		}).then(res => {
-			return this._getResponseData(res)
-		})
-	}
+    async setUserInfo(name, email) {
+        try {
+            const response = await fetch(`${this._baseUrl}/users/me`, {
+                credentials: 'include',
+                method: 'PATCH',
+                headers: this._headers,
+                body: JSON.stringify({
+                    "name": name,
+                    "email": email
+                })
+            });
+            return this._checkResponse(response);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
-	changeUserData(
-		newName,
-		newEmail
-	) {
-		return fetch(`${this._baseUrl}/users/me`, {
-			credentials: 'include',
-			method: 'PATCH',
-			headers: this._headers,
-			body: JSON.stringify({
-				name: newName,
-				email: newEmail
-			})
-		}).then(res => {
-			return this._getResponseData(res)
-		})
-	}
-
-	logout() {
-		return fetch(`${this._baseUrl}/signout`, {
-			credentials: 'include',
-			method: 'POST',
-			headers: this._headers
-		})
-			.then(res => {
-				return this._getResponseData(res)
-			})
-	}
+    async logout() {
+        try {
+            const response = await fetch(`${this._baseUrl}/signout`, {
+                credentials: 'include',
+                method: 'POST',
+                headers: this._headers
+            });
+            return this._checkResponse(response);
+        } catch (err) {
+            console.error(err);
+        }
+    }
 }
 
 export const mainApi = new nomoredomainsApi({

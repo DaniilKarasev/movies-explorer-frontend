@@ -11,51 +11,54 @@ import './Profile.css'
 
 const Profile = ({
 	handleOpenBurgerMenu,
-	onChangeUserData,
-	onLogout,
+	handleUpdateUserInfo,
+	handleLogout,
 	isApiErrorMessage
 }) => {
 	const currentUser = useContext(CurrentUserContext);
-	const [formValid, setFormValid] = useState(false)
+	const [isFormValid, setIsFormValid] = useState(false)
 	const [newName, setNewName] = useState('')
 	const [newEmail, setNewEmail] = useState('')
-	const [submitButtonText, setSubmitButtonText] = useState('Редактировать')
+	const [submitBtnText, setSubmitBtnText] = useState('Редактировать')
 	const [apiErrorMessage, setApiErrorMessage] = useState('')
 	const { validationMessage: nameErrorMessage, isValid: nameValid, onChange: validateName } = useCustomInputValidation({})
 	const { validationMessage: emailErrorMessage, isValid: emailValid, onChange: validateEmail } = useCustomInputValidation({})
 
-	const handleSubmit = (e) => {
-		e.preventDefault()
-		setSubmitButtonText('Сохранение...')
-		onChangeUserData(newName === '' ? currentUser.name : newName, newEmail === '' ? currentUser.email : newEmail)
-			.finally(() => {
-				setSubmitButtonText('Редактировать')
-				setNewName('')
-				setNewEmail('')
-			})
-	}
+	const handleSubmit = async (e) => {
+        e.preventDefault()
+        setSubmitBtnText('Сохранение...')
+        await handleUpdateUserInfo(newName === '' ? currentUser.name : newName, newEmail === '' ? currentUser.email : newEmail)
+        setSubmitBtnText('Редактировать')
+        setNewName('')
+        setNewEmail('')
+    }
 
-	const handleFocusNewNameInput = () => {
-		if (newName === '') {
-			setNewName(currentUser.name)
-			setNewEmail(currentUser.email)
-		}
-	}
+	const handleOnFocusNewName = async () => {
+        if (newName === '') {
+            await setNewName(currentUser.name)
+            await setNewEmail(currentUser.email)
+        }
+    }
 
-	const handleFocusNewEmailInput = () => {
+	const handleOnFocusNewEmail = async () => {
 		if (newEmail === '') {
-			setNewName(currentUser.name)
-			setNewEmail(currentUser.email)
+			await setNewName(currentUser.name)
+			await setNewEmail(currentUser.email)
 		}
 	}
 
 	useEffect(() => {
-		nameValid && emailValid && (newName !== '' || newEmail !== '') ? setFormValid(true) : setFormValid(false);
+		if(nameValid && emailValid && (newName !== '' || newEmail !== '')) {
+			setIsFormValid(true)
+		}
+			else{
+				setIsFormValid(false);
+			}
 
 		if (newName === currentUser.name && newEmail === currentUser.email) {
-			setFormValid(false)
+			setIsFormValid(false)
 		}
-	}, [nameValid, emailValid, newName, newEmail])
+	}, [nameValid, emailValid, newName, newEmail, currentUser.name, currentUser.email])
 
 	useEffect(() => {
 		setApiErrorMessage('')
@@ -65,20 +68,16 @@ const Profile = ({
 		setApiErrorMessage(isApiErrorMessage)
 	}, [isApiErrorMessage])
 
-	function handleChangeName(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
+	async function handleChangeName(e) {
+		setApiErrorMessage('')
 		setNewName(e.target.value);
-		validateName(e)
+		await validateName(e)
 	}
 
-	function handleChangeEmail(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
+	async function handleChangeEmail(e) {
+		setApiErrorMessage('')
 		setNewEmail(e.target.value);
-		validateEmail(e)
+		await validateEmail(e)
 	}
 
 	return (
@@ -88,8 +87,8 @@ const Profile = ({
 				<Section sectionName='profile'>
 					<h1 className='profile__greetings'>Привет, {currentUser.name}!</h1>
 					<AuthForm
-						isFormValid={!formValid}
-						submitButtonText={submitButtonText}
+						isFormValid={!isFormValid}
+						submitBtnText={submitBtnText}
 						onSubmit={handleSubmit}
 						submitButtonClassName='button_placed_profile'
 						authFormClassName='auth__form_placed_profile'
@@ -105,7 +104,7 @@ const Profile = ({
 								inputError={nameValid}
 								onChange={handleChangeName}
 								value={newName}
-								onFocus={handleFocusNewNameInput}
+								onFocus={handleOnFocusNewName}
 							/>
 							<Input
 								inputName='E-mail'
@@ -117,7 +116,7 @@ const Profile = ({
 								inputError={emailValid}
 								onChange={handleChangeEmail}
 								value={newEmail}
-								onFocus={handleFocusNewEmailInput}
+								onFocus={handleOnFocusNewEmail}
 							/>
 							{apiErrorMessage && <FormErrorMessage
 								inputWithErrorName='Ошибка'
@@ -131,12 +130,11 @@ const Profile = ({
 								inputWithErrorName='Email'
 								errorMessage={emailErrorMessage}
 							/>}
-
 						</div>
 					</AuthForm>
 					<button
 						className='profile__button profile__button_type_logout'
-						onClick={onLogout}
+						onClick={handleLogout}
 					>Выйти из аккаунта</button>
 				</Section>
 			</main>

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useLocalStorage } from '../../customHooks/useLocalStorage';
 import { useWindowWidth } from '../../customHooks/useWindowWidth';
 import { moviesApi } from '../../utils/MoviesApi';
@@ -14,116 +14,115 @@ import {
 	movieLoadErrorMessage,
 } from '../../utils/constants';
 
-
 const Movies = ({
 	handleOpenBurgerMenu,
-	onMovieLike,
-	onMovieDislike,
-	onChangeWindowWidth,
-	onFilterMovieCards,
-	onLoadingPartialCards,
-	onChangeButtonVisible,
-	loadMoreMoviesButtonVisible,
+	handleMovieLike,
+	handleMovieDislike,
+	handleChangeAmountMovies,
+	handleFilterMovies,
+	handleLoadingMovies,
+	handleChangeMoreBtnVisible,
+	IsMoreMovieBtnVisible,
 	savedMoviesList,
-	initialAmountCards,
-	amountCardsForLoad,
+	amountMoviesOnLoad,
+	amountMoviesForLoad,
 	infoMessageHandler
 }) => {
 	const [isLoading, setIsLoading] = useState(true);
-	const [shortMovieCheckbox, setShortMovieCheckbox] = useLocalStorage(false, 'ShortMovieCheckbox');
+	const [isFilterActive, setIsFilterActive] = useLocalStorage(false, 'isFilterActive');
 	const [filterQuery, setFilterQuery] = useLocalStorage('', 'FilterQuery');
 	const [moviesList, setMoviesList] = useLocalStorage([], 'MoviesList');
 	const [filteredMovies, setFilteredMovie] = useLocalStorage([], 'FilteredMovies');
-	const [returnedCards, setReturnedCards] = useState([]);
+	const [returnedMovies, setReturnedMovies] = useState([]);
 	const [moviesMessageVisible, setMoviesMessageVisible] = useState(false);
 	const [moviesMessage, setMoviesMessage] = useState(movieNotFoundMessage);
 	const windowWidth = useWindowWidth();
 
-	const handleFilterQueryChange = (query) => {
+	const handleChangeFilterQuery = async (query) => {
 		setFilterQuery(query);
 		if (!filterQuery && moviesList.length === 0) {
-			getMoviesFromMoviesApi();
+			await getMovies();
 		}
 		if (query === '') {
 			infoMessageHandler('Нужно ввести ключевое слово')
 		}
 	}
 
-	const handleFilterDurationChange = () => {
-		setShortMovieCheckbox(!shortMovieCheckbox);
+	const handleChangeFilterStatus = async () => {
+		await setIsFilterActive(!isFilterActive);
 	}
 
-	const getMoviesFromMoviesApi = () => {
-		setIsLoading(true);
-		moviesApi.getMovies()
-			.then((movies) => {
-				setMoviesList(movies);
-			})
-			.catch(err => {
-				setFilterQuery('');
-				setIsLoading(false);
-				setMoviesMessage(movieLoadErrorMessage);
-				setMoviesMessageVisible(true);
-			})
+	async function getMovies() {
+		try {
+			setIsLoading(true);
+			const movies = await moviesApi.getMovies();
+			setMoviesList(movies);
+		} catch (err) {
+			setFilterQuery('');
+			setIsLoading(false);
+			setMoviesMessage(movieLoadErrorMessage);
+			setMoviesMessageVisible(true);
+		}
 	}
+
+	async function loadMoreMovies() {
+        const newCards = filteredMovies.slice(returnedMovies.length, returnedMovies.length + amountMoviesForLoad);
+        await setReturnedMovies([...returnedMovies, ...newCards]);
+    }
 
 	useEffect(() => {
 		if (moviesList.length === 0) {
-			getMoviesFromMoviesApi();
+			getMovies();
 		} else {
 			setIsLoading(false);
 		}
-	}, []);
+	}, [moviesList.length]);
 
 	useEffect(() => {
 		if (moviesList.length > 0) {
-			setFilteredMovie(onFilterMovieCards(moviesList, filterQuery, shortMovieCheckbox));
+			setFilteredMovie(handleFilterMovies(moviesList, filterQuery, isFilterActive));
 			setIsLoading(false);
 		}
-	}, [moviesList]);
+	}, [moviesList, filterQuery, isFilterActive]);
 
 	useEffect(() => {
 		if (filterQuery !== '') {
-			setFilteredMovie(onFilterMovieCards(moviesList, filterQuery, shortMovieCheckbox));
+			setFilteredMovie(handleFilterMovies(moviesList, filterQuery, isFilterActive));
 		}
-	}, [filterQuery]);
+	}, [filterQuery, isFilterActive]);
 
 	useEffect(() => {
-		if (filterQuery !== '') {
-			setFilteredMovie(onFilterMovieCards(moviesList, filterQuery, shortMovieCheckbox));
+		if (filterQuery) {
+			const filteredMovies = handleFilterMovies(moviesList, filterQuery, isFilterActive);
+			setFilteredMovie(filteredMovies);
 		}
-	}, [shortMovieCheckbox]);
+	}, [filterQuery, isFilterActive]);
 
 	useEffect(() => {
-		onChangeWindowWidth(windowWidth);
-	}, [windowWidth]);
+        handleChangeAmountMovies(windowWidth);
+    }, [windowWidth, handleChangeAmountMovies]);
 
 	useEffect(() => {
-		onChangeButtonVisible(filteredMovies, returnedCards, initialAmountCards);
-	}, [returnedCards]);
+		handleChangeMoreBtnVisible(filteredMovies, returnedMovies, amountMoviesOnLoad);
+	}, [filteredMovies, returnedMovies, amountMoviesOnLoad]);
 
 	useEffect(() => {
-		setMoviesMessageVisible(false);
-		if (filteredMovies.length === 0 & filterQuery !== '') {
-			setMoviesMessage(movieNotFoundMessage);
-			setMoviesMessageVisible(true);
-		}
-		if (filteredMovies.length === 0 & moviesList.length === 0) {
-			setMoviesMessageVisible(false);
-		}
-		setReturnedCards(onLoadingPartialCards(filteredMovies, initialAmountCards));
-	}, [filteredMovies]);
+        setMoviesMessageVisible(false);
+        if (filteredMovies.length === 0 & filterQuery !== '') {
+            setMoviesMessage(movieNotFoundMessage);
+            setMoviesMessageVisible(true);
+        }
+        if (filteredMovies.length === 0 & !moviesList.length) {
+            setMoviesMessageVisible(false);
+        }
+        setReturnedMovies(handleLoadingMovies(filteredMovies, amountMoviesOnLoad));
+    }, [filteredMovies, filterQuery, moviesList]);
 
 	useEffect(() => {
-		if (initialAmountCards > returnedCards.length) {
-			setReturnedCards(onLoadingPartialCards(filteredMovies, initialAmountCards));
+		if (amountMoviesOnLoad > returnedMovies.length) {
+			setReturnedMovies(handleLoadingMovies(filteredMovies, amountMoviesOnLoad));
 		}
-
-	}, [initialAmountCards]);
-
-	function onLoadMoreCards() {
-		setReturnedCards(onLoadingPartialCards(filteredMovies, returnedCards.length + amountCardsForLoad));
-	}
+	}, [amountMoviesOnLoad, returnedMovies.length]);
 
 	return (
 		<>
@@ -131,40 +130,40 @@ const Movies = ({
 				handleOpenBurgerMenu={handleOpenBurgerMenu}
 			/>
 			<main className='main'>
-			<SearchForm
-				onFilterQueryChange={handleFilterQueryChange}
-				filterQueryValue={filterQuery}
-				isLoading={isLoading}
-				onMovieCheckboxChange={handleFilterDurationChange}
-				shortMovieCheckboxChecked={shortMovieCheckbox}
-			/>
-			{isLoading ? (
-				<Preloader />
-			) : (
-				<MoviesCardList
-					onLoadMoreButtonClick={onLoadMoreCards}
-					loadMoreMoviesButtonVisible={loadMoreMoviesButtonVisible}
-					moviesMessageVisible={moviesMessageVisible}
-					moviesMessage={moviesMessage}
-				>
-					{returnedCards.map((movie) => {
-						let liked = false
-						if (savedMoviesList.filter(savedMovie => savedMovie.movieId === movie.id).length !== 0) {
-							liked = true
-						}
-						return (
-							<MoviesCard
-								movie={movie}
-								onMovieLike={onMovieLike}
-								onMovieDislike={onMovieDislike}
-								key={`${movie.id}`}
-								liked={liked}
-							/>
-						)
-					})}
-				</MoviesCardList>
-			)
-			}
+				<SearchForm
+					handleChangeFilterQuery={handleChangeFilterQuery}
+					filterQueryValue={filterQuery}
+					isLoading={isLoading}
+					handleChangeFilterStatus={handleChangeFilterStatus}
+					isFilterActive={isFilterActive}
+				/>
+				{isLoading ? (
+					<Preloader />
+				) : (
+					<MoviesCardList
+						loadMoreMovies={loadMoreMovies}
+						IsMoreMovieBtnVisible={IsMoreMovieBtnVisible}
+						moviesMessageVisible={moviesMessageVisible}
+						moviesMessage={moviesMessage}
+					>
+						{returnedMovies.map((movie) => {
+							let liked = false
+							if (savedMoviesList.filter(savedMovie => savedMovie.movieId === movie.id).length !== 0) {
+								liked = true
+							}
+							return (
+								<MoviesCard
+									movie={movie}
+									handleMovieLike={handleMovieLike}
+									handleMovieDislike={handleMovieDislike}
+									key={`${movie.id}`}
+									liked={liked}
+								/>
+							)
+						})}
+					</MoviesCardList>
+				)
+				}
 			</main>
 			<Footer />
 		</>

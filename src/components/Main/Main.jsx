@@ -11,7 +11,6 @@ import Footer from "../Footer/Footer";
 const Main = ({
 	handleOpenBurgerMenu
 }) => {
-
 	return (
 		<>
 			<Header handleOpenBurgerMenu={handleOpenBurgerMenu} theme='dark' />

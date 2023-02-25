@@ -5,7 +5,6 @@ const BurgerMenuOpenButton = ({
 	theme,
 	handleOpenBurgerMenu
 }) => {
-
 	return (
 		<div
 			className='burger-menu-button'

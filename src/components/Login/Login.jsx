@@ -6,11 +6,11 @@ import Input from '../Input/Input';
 import FormErrorMessage from '../FormErrorMessage/FormErrorMessage';
 
 const Login = ({
-	onSignIn,
+	handleSignIn,
 	isApiErrorMessage
 }) => {
-	const [formValid, setFormValid] = useState(false)
-	const [submitButtonText, setSubmitButtonText] = useState("Войти")
+	const [isFormValid, setIsFormValid] = useState(false)
+	const [submitBtnText, setSubmitBtnText] = useState("Войти")
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [apiErrorMessage, setApiErrorMessage] = useState('')
@@ -18,54 +18,52 @@ const Login = ({
 	const { validationMessage: passwordErrorMessage, isValid: passwordValid, onChange: validatePassword } = useCustomInputValidation({})
 
 	useEffect(() => {
-		emailValid && email !== '' && passwordValid && password !== '' ? setFormValid(false) : setFormValid(true);
-	}, [emailValid, passwordValid, email, password])
-
-	useEffect(() => {
-		setApiErrorMessage('')
-	}, [])
+        emailValid && email !== '' && passwordValid && password !== '' ? setIsFormValid(false) : setIsFormValid(true);
+    }, [emailValid, passwordValid, email, password]);
 
 	useEffect(() => {
 		setApiErrorMessage(isApiErrorMessage)
 	}, [isApiErrorMessage])
 
-	function changeEmail(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
-		setEmail(e.target.value);
-		validateEmail(e)
-	}
+	async function changeEmail(e) {
+        setApiErrorMessage('');
+        setEmail(e.target.value);
+        await validateEmail(e);
+    }
 
-	function changePassword(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
-		setPassword(e.target.value);
-		validatePassword(e)
-	}
+	async function changePassword(e) {
+        setApiErrorMessage('');
+        setPassword(e.target.value);
+        await validatePassword(e);
+    }
 
-	function handleSubmit(e) {
+	async function handleSubmit(e) {
 		e.preventDefault()
-		setSubmitButtonText("Вхожу...")
-		onSignIn({
-			email: email,
-			password: password
-		})
-			.finally(() => {
-				setSubmitButtonText("Войти")
-				setApiErrorMessage('')
+		if (email === '' || password === '') {
+			return
+		}
+		setSubmitBtnText("Вхожу...")
+		try {
+			await handleSignIn({
+				email: email,
+				password: password
 			})
+			setApiErrorMessage('')
+		} catch (err) {
+			setApiErrorMessage(err.message)
+		} finally {
+			setSubmitBtnText("Войти")
+		}
 	}
 
 	return (
 		<PageWithForm
 			name='login'
-			greeting='Рады видеть!'
+			title='Рады видеть!'
 		>
 			<AuthForm
-				isFormValid={formValid}
-				submitButtonText={submitButtonText}
+				isFormValid={isFormValid}
+				submitBtnText={submitBtnText}
 				onSubmit={handleSubmit}
 			>
 				<Input

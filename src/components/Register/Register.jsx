@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 import { useCustomInputValidation } from '../../customHooks/useCustomInputValidation';
 import PageWithForm from '../PageWithForm/PageWithForm';
@@ -6,11 +7,11 @@ import Input from '../Input/Input';
 import FormErrorMessage from '../FormErrorMessage/FormErrorMessage';
 
 const Register = ({
-	onSignUp,
+	handleSignUp,
 	isApiErrorMessage
 }) => {
-	const [formValid, setFormValid] = useState(false)
-	const [submitButtonText, setSubmitButtonText] = useState("Зарегистрироваться")
+	const [isFormValid, setIsFormValid] = useState(false)
+	const [submitBtnText, setSubmitBtnText] = useState("Зарегистрироваться")
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -19,67 +20,63 @@ const Register = ({
 	const { validationMessage: emailErrorMessage, isValid: emailValid, onChange: validateEmail } = useCustomInputValidation({})
 	const { validationMessage: passwordErrorMessage, isValid: passwordValid, onChange: validatePassword } = useCustomInputValidation({})
 
+	async function validateForm() {
+		await setIsFormValid(nameValid && name !== '' && emailValid && email !== '' && passwordValid && password !== '' ? false : true);
+	}
+	
 	useEffect(() => {
-		nameValid && name !== '' && emailValid && email !== '' && passwordValid && password !== '' ? setFormValid(false) : setFormValid(true);
-	}, [nameValid, emailValid, passwordValid, name, email, password])
-
-	useEffect(() => {
-		setApiErrorMessage('')
-	}, [])
+		validateForm();
+	}, [nameValid, emailValid, passwordValid, name, email, password]);
 
 	useEffect(() => {
 		setApiErrorMessage(isApiErrorMessage)
 	}, [isApiErrorMessage])
 
-	function changeName(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
-		setName(e.target.value);
-		validateName(e)
-	}
+	async function changeName(e) {
+        setApiErrorMessage('')
+        setName(e.target.value);
+        await validateName(e)
+    }
 
-	function changeEmail(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
+	async function changeEmail(e) {
+		setApiErrorMessage('')
 		setEmail(e.target.value);
-		validateEmail(e)
+		await validateEmail(e)
 	}
 
-	function changePassword(e) {
-		if (apiErrorMessage) {
-			setApiErrorMessage('')
-		}
+	async function changePassword(e) {
+		setApiErrorMessage('')
 		setPassword(e.target.value);
-		validatePassword(e)
+		await validatePassword(e)
 	}
 
-	function handleSubmit(e) {
-		e.preventDefault()
-		setSubmitButtonText("Регистрация...")
-		onSignUp({
-			name: name,
-			email: email,
-			password: password
-		})
-			.finally(() => {
-				setApiErrorMessage('')
-				setSubmitButtonText("Зарегистрироваться")
-				setName('')
-				setEmail('')
-				setPassword('')
-			})
-	}
+	async function handleSubmit(e) {
+        e.preventDefault();
+        setSubmitBtnText("Регистрация...");
+        try {
+            await handleSignUp({
+                name: name,
+                email: email,
+                password: password
+            });
+            setApiErrorMessage('');
+            setSubmitBtnText("Зарегистрироваться");
+            setName('');
+            setEmail('');
+            setPassword('');
+        } catch (err) {
+            setApiErrorMessage(err.message);
+        }
+    }
 
 	return (
 		<PageWithForm
 			name='register'
-			greeting='Добро пожаловать!'
+			title='Добро пожаловать!'
 		>
 			<AuthForm
-				isFormValid={formValid}
-				submitButtonText={submitButtonText}
+				isFormValid={isFormValid}
+				submitBtnText={submitBtnText}
 				onSubmit={handleSubmit}
 			>
 				<Input

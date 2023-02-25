@@ -8,7 +8,6 @@ const Button = ({
 	isDisabled,
 	onClick,
 }) => {
-
 	return (
 		<button
 			className={className}
